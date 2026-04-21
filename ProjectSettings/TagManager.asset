@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
+  serializedVersion: 3
   tags: []
   layers:
   - Default
@@ -38,6 +38,36 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Sky
+    uniqueID: 3925458597
+    locked: 0
+  - name: Background
+    uniqueID: 1815320059
+    locked: 0
+  - name: Back Objects
+    uniqueID: 2939998049
+    locked: 0
+  - name: Objects
+    uniqueID: 2479209353
+    locked: 0
+  - name: Characters
+    uniqueID: 3501364109
+    locked: 0
+  - name: Front Objects
+    uniqueID: 2286096541
+    locked: 0
+  - name: Ground
+    uniqueID: 846571809
+    locked: 0
+  - name: UI World
+    uniqueID: 2501807035
+    locked: 0
+  - name: UI Screen
+    uniqueID: 136911011
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
+  m_RenderingLayers:
+  - Default
+  m_MigratedRenderPipelines: []
