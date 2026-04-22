@@ -12,11 +12,23 @@ public class PlayerMovement : MonoBehaviour
     public bool IsFacingRight { get; private set; } = true;
     private void Awake()
     {
-        inputReader = ServiceLocator.Get<InputReader>();
         rb = GetComponent<Rigidbody2D>();
     }
-    private void OnEnable() => inputReader.OnMove += HandleMoveInput;
-    private void OnDisable() => inputReader.OnMove -= HandleMoveInput;
+    private void Start()
+    {
+        inputReader = ServiceLocator.Get<InputReader>();
+        inputReader.OnMove += HandleMoveInput;
+    }
+    private void OnEnable()
+    {
+        if (inputReader) 
+            inputReader.OnMove += HandleMoveInput;
+    }  
+    void OnDisable() 
+    {
+        if(inputReader)
+            inputReader.OnMove -= HandleMoveInput;
+    }
 
     private void HandleMoveInput(float value) => moveInput = value;
     private void FixedUpdate()

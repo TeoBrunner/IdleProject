@@ -7,13 +7,22 @@ public class PlayerInteraction : MonoBehaviour
     public IInteractable CurrentInteractable { get; private set; }
     public bool hasInteractable => CurrentInteractable != null;
 
-    private void Awake()
+    private void Start()
     {
         inputReader = ServiceLocator.Get<InputReader>();
+        inputReader.OnInteractPressed += HandleInteractPressed;
     }
-    private void OnEnable() => inputReader.OnInteractPressed += HandleInteractPressed;
-    private void OnDisable() => inputReader.OnInteractPressed -= HandleInteractPressed;
-
+    private void OnEnable()
+    {
+        if(inputReader)
+            inputReader.OnInteractPressed += HandleInteractPressed;
+    }
+        
+    private void OnDisable()
+    {
+        if (inputReader)
+            inputReader.OnInteractPressed -= HandleInteractPressed;
+    }
     private void HandleInteractPressed()
     {
         CurrentInteractable?.OnInteract();

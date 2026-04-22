@@ -6,7 +6,7 @@ public class ResourceMine : MonoBehaviour, IInteractable
     [SerializeField] int resourcePerInteraction = 1;
 
     private ResourceManager resourceManager;
-    private void Awake()
+    private void Start()
     {
         resourceManager = ServiceLocator.Get<ResourceManager>();
     }
