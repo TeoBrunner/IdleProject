@@ -33,7 +33,7 @@ public class AutoClickProducer : MonoBehaviour, IBuildingInteractionHandler
 
     private void Produce()
     {
-        resourceManager.Add(data.ProducedResource, data.ResourcePerTick);
+        resourceManager.Add(data.ProducedResource, data.ResourcePerAutoClick);
     }
 
     public void OnPlayerEnter()

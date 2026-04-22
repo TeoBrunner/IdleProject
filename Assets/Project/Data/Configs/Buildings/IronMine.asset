@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4aab4e19f4ac92244bd0fbfc19508a02, type: 3}
-  m_Name: TownHall
+  m_Name: IronMine
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
-  buildingId: townhall
-  displayName: Town Hall
+  buildingId: ironMine
+  displayName: Iron Mine
   description: 
-  producedResource: {fileID: 11400000, guid: 936bddab400f58942af3e9240b9805aa, type: 2}
-  hasManualClick: 0
-  resourcePerClick: 0
-  hasAutoClick: 1
-  resourcePerAutoClick: 5
-  tickInterval: 1
+  producedResource: {fileID: 11400000, guid: cce28e8a46704294580df41ff3593af7, type: 2}
+  hasManualClick: 1
+  resourcePerClick: 1
+  hasAutoClick: 0
+  resourcePerAutoClick: 1
+  tickInterval: 0
