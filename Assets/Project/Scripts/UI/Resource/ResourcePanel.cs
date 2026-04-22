@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ResourcePanel : MonoBehaviour
 {
@@ -35,6 +36,8 @@ public class ResourcePanel : MonoBehaviour
             var entry = Instantiate(entryPrefab, transform);
             entry.Initialize(resource, newBalance);
             entries[resource] = entry;
+
+            LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
         }
     }
 }
