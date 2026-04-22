@@ -13,6 +13,8 @@ public class InputReader : MonoBehaviour
     private InputAction interactAction;
     private void Awake()
     {
+        ServiceLocator.Register<InputReader>(this);
+
         PlayerInput playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions["Move"];
         interactAction = playerInput.actions["Interact"];

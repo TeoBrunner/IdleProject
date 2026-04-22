@@ -2,18 +2,21 @@ using UnityEngine;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    [SerializeField] InputReader inputReader;
+    private InputReader inputReader;
 
     public IInteractable CurrentInteractable { get; private set; }
     public bool hasInteractable => CurrentInteractable != null;
 
+    private void Awake()
+    {
+        inputReader = ServiceLocator.Get<InputReader>();
+    }
     private void OnEnable() => inputReader.OnInteractPressed += HandleInteractPressed;
     private void OnDisable() => inputReader.OnInteractPressed -= HandleInteractPressed;
 
     private void HandleInteractPressed()
     {
         CurrentInteractable?.OnInteract();
-        Debug.Log("Player interacted with: " + CurrentInteractable);
     } 
 
     private void OnTriggerEnter2D(Collider2D other)

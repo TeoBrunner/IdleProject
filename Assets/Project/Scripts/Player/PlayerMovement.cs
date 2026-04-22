@@ -2,16 +2,17 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] InputReader inputReader;
     [SerializeField] Transform spriteParent;
     [SerializeField] PlayerConfig config;
-    
+
+    private InputReader inputReader;
     private Rigidbody2D rb;
     private float moveInput;
 
     public bool IsFacingRight { get; private set; } = true;
     private void Awake()
     {
+        inputReader = ServiceLocator.Get<InputReader>();
         rb = GetComponent<Rigidbody2D>();
     }
     private void OnEnable() => inputReader.OnMove += HandleMoveInput;
