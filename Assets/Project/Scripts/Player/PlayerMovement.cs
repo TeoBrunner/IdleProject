@@ -1,12 +1,16 @@
+using Configs;
 using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] Transform spriteParent;
-    [SerializeField] PlayerConfig config;
 
-    private InputReader inputReader;
+    private ConfigProvider configProvider;
+    private InputProvider inputProvider;
     private Rigidbody2D rb;
+
+    private PlayerConfig config;
+    private int level = 0;
     private float moveInput;
 
     public bool IsFacingRight { get; private set; } = true;
@@ -16,26 +20,48 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Start()
     {
-        inputReader = ServiceLocator.Get<InputReader>();
-        inputReader.OnMove += HandleMoveInput;
+        configProvider = ServiceLocator.Get<ConfigProvider>();
+        if (configProvider)
+        {
+            UpdateConfig();
+            configProvider.ConfigUpdated += UpdateConfig;
+        }
+
+        inputProvider = ServiceLocator.Get<InputProvider>();
+        if(inputProvider)
+            inputProvider.OnMove += HandleMoveInput;
     }
     private void OnEnable()
     {
-        if (inputReader) 
-            inputReader.OnMove += HandleMoveInput;
+        if(configProvider)
+            configProvider.ConfigUpdated += UpdateConfig;
+
+        if (inputProvider) 
+            inputProvider.OnMove += HandleMoveInput;
     }  
     void OnDisable() 
     {
-        if(inputReader)
-            inputReader.OnMove -= HandleMoveInput;
-    }
+        if (configProvider)
+            configProvider.ConfigUpdated -= UpdateConfig;
 
-    private void HandleMoveInput(float value) => moveInput = value;
+        if (inputProvider)
+            inputProvider.OnMove -= HandleMoveInput;
+    }
     private void FixedUpdate()
     {
         ApplyMovement();
         UpdateFacing();
     }
+
+    private void UpdateConfig()
+    {
+        if (configProvider)
+        {
+            config = configProvider.GetConfigs<PlayerConfig>()[level];
+        }
+    }
+
+    private void HandleMoveInput(float value) => moveInput = value;
 
     private void ApplyMovement()
     {

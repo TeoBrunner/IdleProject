@@ -1,14 +1,16 @@
+using Configs;
 using UnityEngine;
 
 [RequireComponent(typeof(Building))]
 public class ManualProducer : MonoBehaviour, IBuildingInteractionHandler
 {
-    private BuildingData data;
+    private Building building;
     private ResourceManager resourceManager;
+    private BuildingConfig Config => building.Configs[building.Level];
 
     private void Awake()
     {
-        data = GetComponent<Building>().Data;
+        building = GetComponent<Building>();
     }
     private void Start()
     {
@@ -17,7 +19,8 @@ public class ManualProducer : MonoBehaviour, IBuildingInteractionHandler
 
     public void OnInteract()
     {
-        resourceManager.Add(data.ProducedResource, data.ResourcePerClick);
+        if (!Config.HasManualClick) return;
+        resourceManager.Add(Config.ProducedResource, Config.GatherPerClick);
     }
 
     public void OnPlayerEnter() {}

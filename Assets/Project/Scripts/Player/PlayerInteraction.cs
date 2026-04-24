@@ -2,26 +2,27 @@ using UnityEngine;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    private InputReader inputReader;
+    private InputProvider inputProvider;
 
     public IInteractable CurrentInteractable { get; private set; }
     public bool hasInteractable => CurrentInteractable != null;
 
     private void Start()
     {
-        inputReader = ServiceLocator.Get<InputReader>();
-        inputReader.OnInteractPressed += HandleInteractPressed;
+        inputProvider = ServiceLocator.Get<InputProvider>();
+        if(inputProvider)
+            inputProvider.OnInteractPressed += HandleInteractPressed;
     }
     private void OnEnable()
     {
-        if(inputReader)
-            inputReader.OnInteractPressed += HandleInteractPressed;
+        if(inputProvider)
+            inputProvider.OnInteractPressed += HandleInteractPressed;
     }
         
     private void OnDisable()
     {
-        if (inputReader)
-            inputReader.OnInteractPressed -= HandleInteractPressed;
+        if (inputProvider)
+            inputProvider.OnInteractPressed -= HandleInteractPressed;
     }
     private void HandleInteractPressed()
     {

@@ -4,26 +4,21 @@ using UnityEngine;
 
 public class ResourceManager : MonoBehaviour
 {
-    public event Action<ResourceDefinition, int> OnBalanceChanged;
+    public event Action<ResourceType, int> OnBalanceChanged;
 
-    private readonly Dictionary<ResourceDefinition, int> _balances = new();
+    private readonly Dictionary<ResourceType, int> _balances = new();
 
     private void Awake()
     {
         ServiceLocator.Register<ResourceManager>(this);
     }
 
-    public int GetBalance(ResourceDefinition resource)
+    public int GetBalance(ResourceType resource)
     {
         return _balances.TryGetValue(resource, out int balance) ? balance : 0;
     }
-    public void Add(ResourceDefinition resource, int amount = 0)
+    public void Add(ResourceType resource, int amount = 0)
     {
-        if (resource == null)
-        {
-            Debug.LogWarning("ResourceManager.Add: resource is null");
-            return;
-        }
 
         if (amount <= 0)
         {
@@ -39,14 +34,8 @@ public class ResourceManager : MonoBehaviour
         _balances[resource] += amount;
         OnBalanceChanged?.Invoke(resource, _balances[resource]);
     }
-    public bool TrySpend(ResourceDefinition resource, int amount)
+    public bool TrySpend(ResourceType resource, int amount)
     {
-        if (resource == null)
-        {
-            Debug.LogWarning("ResourceManager.TrySpend: resource is null");
-            return false;
-        }
-
         if (amount <= 0)
         {
             Debug.LogWarning($"ResourceManager.TrySpend: amount must be non-negative. Trying to spend: {amount}");
@@ -60,7 +49,7 @@ public class ResourceManager : MonoBehaviour
         OnBalanceChanged?.Invoke(resource, _balances[resource]);
         return true;
     }
-    public bool HasEnough(ResourceDefinition resource, int amount)
+    public bool HasEnough(ResourceType resource, int amount)
     {
         return GetBalance(resource) >= amount;
     }

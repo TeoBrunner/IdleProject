@@ -318,6 +318,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8363785669362493528, guid: f7e93cafac67f8e429525c7875ead912, type: 3}
   m_PrefabInstance: {fileID: 8694605123453765493}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &79542681
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 79542682}
+  - component: {fileID: 79542683}
+  m_Layer: 0
+  m_Name: ConfigProvider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &79542682
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 79542681}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2052290334}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &79542683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 79542681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 724aa8eda0eaf79489de1e4855a28d59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConfigProvider
 --- !u!1 &130248020
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,7 +392,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2126812763}
   - {fileID: 2650859}
   m_Father: {fileID: 883314782}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -478,7 +521,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   spriteParent: {fileID: 830965920}
-  config: {fileID: 11400000, guid: 9244300c299ef87439e844cd645c4c69, type: 2}
 --- !u!114 &194257939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2801,7 +2843,7 @@ GameObject:
   - component: {fileID: 1173862990}
   - component: {fileID: 1173862989}
   m_Layer: 0
-  m_Name: InputReader
+  m_Name: InputProvider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2872,6 +2914,50 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 519420031}
+--- !u!1 &1189976497
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1189976498}
+  - component: {fileID: 1189976499}
+  m_Layer: 0
+  m_Name: MainThreadDispatcher
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1189976498
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189976497}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2052290334}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1189976499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189976497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35a250ae8c74dd54194931d7f5365902, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MainThreadDispatcher
 --- !u!1 &1318971442
 GameObject:
   m_ObjectHideFlags: 0
@@ -3886,6 +3972,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1189976498}
+  - {fileID: 79542682}
   - {fileID: 1173862988}
   - {fileID: 1092922551}
   - {fileID: 669761420}
@@ -4051,6 +4139,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2126812763}
+  - component: {fileID: 2126812764}
   m_Layer: 0
   m_Name: Buildings
   m_TagString: Untagged
@@ -4075,8 +4164,21 @@ Transform:
   - {fileID: 14731359}
   - {fileID: 1715253887}
   - {fileID: 355794423}
-  m_Father: {fileID: 130248021}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &2126812764
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2126812762}
+  m_Enabled: 1
+  m_SortingLayerID: -1815757943
+  m_SortingLayer: -6
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
+  m_Sort3DAs2D: 0
 --- !u!1001 &2505211798804302398
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4313,4 +4415,5 @@ SceneRoots:
   - {fileID: 538593222}
   - {fileID: 1434264580}
   - {fileID: 883314782}
+  - {fileID: 2126812763}
   - {fileID: 194257935}

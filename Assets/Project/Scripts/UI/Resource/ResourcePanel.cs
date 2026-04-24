@@ -8,7 +8,7 @@ public class ResourcePanel : MonoBehaviour
 
     private ResourceManager resourceManager;
 
-    private readonly Dictionary<ResourceDefinition, ResourceEntryView> entries = new();
+    private readonly Dictionary<ResourceType, ResourceEntryView> entries = new();
 
     private void Start()
     {
@@ -25,7 +25,7 @@ public class ResourcePanel : MonoBehaviour
             resourceManager.OnBalanceChanged -= HandleBalanceChanged;
     }
 
-    private void HandleBalanceChanged(ResourceDefinition resource, int newBalance)
+    private void HandleBalanceChanged(ResourceType resource, int newBalance)
     {
         if (entries.TryGetValue(resource, out var existingEntry))
         {

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
-public class InputReader : MonoBehaviour
+public class InputProvider : MonoBehaviour
 {
     public event Action<float> OnMove;
     public event Action OnInteractPressed;
@@ -13,7 +13,7 @@ public class InputReader : MonoBehaviour
     private InputAction interactAction;
     private void Awake()
     {
-        ServiceLocator.Register<InputReader>(this);
+        ServiceLocator.Register<InputProvider>(this);
 
         PlayerInput playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions["Move"];
