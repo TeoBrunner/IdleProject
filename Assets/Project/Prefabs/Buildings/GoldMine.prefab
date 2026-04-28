@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6701969584302871728}
   - component: {fileID: 8378492025573123412}
   - component: {fileID: 7321235864429454573}
-  - component: {fileID: 8051060960705086959}
   - component: {fileID: 2662635901900886209}
   m_Layer: 0
   m_Name: GoldMine
@@ -49,7 +48,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f796fbd027b3801429711669f258457c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Building
-  data: {fileID: 11400000, guid: 1aa8f8ce407df5846a9f3e57dae6aa9b, type: 2}
 --- !u!114 &7321235864429454573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,18 +61,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionIcon
   icon: {fileID: 6329153466752545640}
---- !u!114 &8051060960705086959
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5869670269414539327}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9919be926b4e064db692674c827a438, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ManualProducer
 --- !u!61 &2662635901900886209
 BoxCollider2D:
   m_ObjectHideFlags: 0

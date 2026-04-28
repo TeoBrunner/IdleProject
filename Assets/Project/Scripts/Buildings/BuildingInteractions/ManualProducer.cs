@@ -6,7 +6,7 @@ public class ManualProducer : MonoBehaviour, IBuildingInteractionHandler
 {
     private Building building;
     private ResourceManager resourceManager;
-    private BuildingMainConfig Config => building.Configs[building.Level];
+    //private BuildingMainConfig Config => building.Configs[building.Level];
 
     private void Awake()
     {
@@ -19,8 +19,8 @@ public class ManualProducer : MonoBehaviour, IBuildingInteractionHandler
 
     public void OnInteract()
     {
-        if (!Config.HasManualClick) return;
-        resourceManager.Add(Config.ProducedResource, Config.GatherPerClick);
+        //if (!Config.HasManualClick) return;
+        //resourceManager.Add(Config.ProducedResource, Config.GatherPerClick);
     }
 
     public void OnPlayerEnter() {}

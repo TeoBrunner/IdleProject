@@ -9,7 +9,7 @@ public class AutoClickProducer : MonoBehaviour, IBuildingInteractionHandler
     private bool isPlayerNearby;
     private float tickTimer;
 
-    private BuildingMainConfig Config => building.Configs[building.Level];
+    //private BuildingMainConfig Config => building.Configs[building.Level];
     private void Awake()
     {
         building = GetComponent<Building>();
@@ -21,21 +21,21 @@ public class AutoClickProducer : MonoBehaviour, IBuildingInteractionHandler
 
     private void Update()
     {
-        if (!isPlayerNearby) return;
-        if (!Config.HasAutoClick) return;
+        //if (!isPlayerNearby) return;
+        //if (!Config.HasAutoClick) return;
 
-        tickTimer += Time.deltaTime;
+        //tickTimer += Time.deltaTime;
 
-        if (tickTimer >= Config.AutoClickInterval)
-        {
-            tickTimer -= Config.AutoClickInterval;
-            Produce();
-        }
+        //if (tickTimer >= Config.AutoClickInterval)
+        //{
+        //    tickTimer -= Config.AutoClickInterval;
+        //    Produce();
+        //}
     }
 
     private void Produce()
     {
-        resourceManager.Add(Config.ProducedResource, Config.GatherPerAutoClick);
+        //resourceManager.Add(Config.ProducedResource, Config.GatherPerAutoClick);
     }
 
     public void OnPlayerEnter()

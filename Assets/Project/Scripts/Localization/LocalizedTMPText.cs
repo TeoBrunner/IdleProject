@@ -19,9 +19,9 @@ public class LocalizedTMPText : MonoBehaviour
         localizationProvider = ServiceLocator.Get<LocalizationProvider>();
         if(localizationProvider)
         {
-                localizationProvider.LocalizationUpdated += UpdateText;
+            UpdateText();
+            localizationProvider.LocalizationUpdated += UpdateText;
         }
-        UpdateText();
     }
 
     void OnEnable()

@@ -441,7 +441,6 @@ GameObject:
   - component: {fileID: 8044375226133995384}
   - component: {fileID: 3939674229772797285}
   - component: {fileID: 4714531308856325877}
-  - component: {fileID: 8714009264011437652}
   - component: {fileID: 1446654015385235776}
   m_Layer: 0
   m_Name: IronMine
@@ -479,7 +478,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f796fbd027b3801429711669f258457c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Building
-  data: {fileID: 11400000, guid: bfb20e4558531ff40bf4acce911ad5da, type: 2}
 --- !u!114 &4714531308856325877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -493,18 +491,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionIcon
   icon: {fileID: 4259623689234901699}
---- !u!114 &8714009264011437652
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6307873307688059725}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9919be926b4e064db692674c827a438, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ManualProducer
 --- !u!61 &1446654015385235776
 BoxCollider2D:
   m_ObjectHideFlags: 0

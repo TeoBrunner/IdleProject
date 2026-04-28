@@ -4,33 +4,12 @@ using UnityEngine;
 
 public class Building : MonoBehaviour, IInteractable
 {
+    [SerializeField] string buildingID;
     private IBuildingInteractionHandler[] interactionHandlers;
 
-    private ConfigProvider configProvider;
-    private BuildingMainConfig[] configs;
-    private int level;
-
-    public BuildingMainConfig[] Configs => configs;
-    public int Level => level;
     private void Awake()
     {
         interactionHandlers = GetComponents<IBuildingInteractionHandler>();
-    }
-    private void Start()
-    {
-        configProvider = ServiceLocator.Get<ConfigProvider>();
-        if (configProvider)
-        {
-            UpdateConfig();
-            configProvider.ConfigUpdated += UpdateConfig;
-        }
-    }
-    private void UpdateConfig()
-    {
-        if (configProvider)
-        {
-            configs = configProvider.GetConfigs<BuildingMainConfig>();
-        }
     }
     public void OnPlayerEnter()
     {
