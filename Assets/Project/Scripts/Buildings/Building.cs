@@ -1,4 +1,5 @@
 using Configs;
+using Events;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,10 +28,15 @@ public class Building : MonoBehaviour, IInteractable
     {
         foreach (var handler in interactionHandlers)
             handler.OnInteract();
+
+        if(interactionHandlers.Length > 0)
+            EventBus.Publish(new BuildingClickedEvent(this));
     }
     public void OnExamine()
     {
         foreach (var handler in interactionHandlers)
             handler.OnExamine();
+        if(interactionHandlers.Length > 0)
+            EventBus.Publish(new BuildingExaminedEvent(this));
     }
 }

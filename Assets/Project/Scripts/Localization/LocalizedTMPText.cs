@@ -46,9 +46,12 @@ public class LocalizedTMPText : MonoBehaviour
         if (!textComponent)
             return;
 
-        if (!string.IsNullOrEmpty(localizationKey))
-        {
-            textComponent.text = localizationProvider.GetString(localizationKey);
-        }
+        if (string.IsNullOrEmpty(localizationKey))
+            return;
+
+        if(!localizationProvider)
+            localizationProvider = ServiceLocator.Get<LocalizationProvider>();
+
+        textComponent.text = localizationProvider.GetString(localizationKey);
     }
 }

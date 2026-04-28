@@ -1,12 +1,11 @@
+using Events;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ResourceManager : MonoBehaviour
 {
-    public event Action<ResourceType, int> OnBalanceChanged;
-
-    private readonly Dictionary<ResourceType, int> _balances = new();
+    private readonly Dictionary<ResourceType, int> balances = new();
 
     private void Awake()
     {
@@ -15,7 +14,7 @@ public class ResourceManager : MonoBehaviour
 
     public int GetBalance(ResourceType resource)
     {
-        return _balances.TryGetValue(resource, out int balance) ? balance : 0;
+        return balances.TryGetValue(resource, out int balance) ? balance : 0;
     }
     public void Add(ResourceType resource, int amount = 0)
     {
@@ -26,13 +25,14 @@ public class ResourceManager : MonoBehaviour
             return;
         }
 
-        if (!_balances.ContainsKey(resource))
+        if (!balances.ContainsKey(resource))
         {
-            _balances[resource] = 0;
+            balances[resource] = 0;
         }
 
-        _balances[resource] += amount;
-        OnBalanceChanged?.Invoke(resource, _balances[resource]);
+        balances[resource] += amount;
+        EventBus.Publish(new ResourceAddedEvent(resource, amount));
+        EventBus.Publish(new ResourceBalanceChangedEvent(resource, balances[resource]));
     }
     public bool TrySpend(ResourceType resource, int amount)
     {
@@ -45,8 +45,9 @@ public class ResourceManager : MonoBehaviour
         if (GetBalance(resource) < amount)
             return false;
 
-        _balances[resource] -= amount;
-        OnBalanceChanged?.Invoke(resource, _balances[resource]);
+        balances[resource] -= amount;
+        EventBus.Publish(new ResourceSpendEvent(resource, amount));
+        EventBus.Publish(new ResourceBalanceChangedEvent(resource, balances[resource]));
         return true;
     }
     public bool HasEnough(ResourceType resource, int amount)

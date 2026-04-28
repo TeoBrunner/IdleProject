@@ -21,7 +21,7 @@ public class InputProvider : MonoBehaviour
         PlayerInput playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions["Move"];
         interactAction = playerInput.actions["Interact"];
-        interactAction = playerInput.actions["Examine"];
+        examineAction = playerInput.actions["Examine"];
     }
     private void OnEnable()
     {

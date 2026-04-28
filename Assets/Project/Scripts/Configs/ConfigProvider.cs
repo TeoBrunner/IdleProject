@@ -85,7 +85,7 @@ public class ConfigProvider : MonoBehaviour
             return;
         }
 
-        string[] excelFiles = Directory.GetFiles(configsPath, "*.xlsx");
+        string[] excelFiles = Directory.GetFiles(configsPath, "*.xlsx", SearchOption.AllDirectories);
         foreach (string filePath in excelFiles)
         {
             string tableName = Path.GetFileNameWithoutExtension(filePath);

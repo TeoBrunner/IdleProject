@@ -1,3 +1,4 @@
+using Events;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,26 +17,25 @@ public class ResourcePanel : MonoBehaviour
 
         if (resourceManager == null) return;
 
-        resourceManager.OnBalanceChanged += HandleBalanceChanged;
+        EventBus.Subscribe<ResourceBalanceChangedEvent>(HandleBalanceChanged);
     }
 
     private void OnDestroy()
     {
-        if (resourceManager != null)
-            resourceManager.OnBalanceChanged -= HandleBalanceChanged;
+        EventBus.Unsubscribe<ResourceBalanceChangedEvent>(HandleBalanceChanged);
     }
 
-    private void HandleBalanceChanged(ResourceType resource, int newBalance)
+    private void HandleBalanceChanged(ResourceBalanceChangedEvent evt)
     {
-        if (entries.TryGetValue(resource, out var existingEntry))
+        if (entries.TryGetValue(evt.ResourceType, out var existingEntry))
         {
-            existingEntry.UpdateAmount(newBalance);
+            existingEntry.UpdateAmount(evt.Amount);
         }
         else
         {
             var entry = Instantiate(entryPrefab, transform);
-            entry.Initialize(resource, newBalance);
-            entries[resource] = entry;
+            entry.Initialize(evt.ResourceType, evt.Amount);
+            entries[evt.ResourceType] = entry;
 
             LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
         }
