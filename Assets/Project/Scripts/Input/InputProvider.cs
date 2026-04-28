@@ -7,10 +7,13 @@ public class InputProvider : MonoBehaviour
     public event Action<float> OnMove;
     public event Action OnInteractPressed;
     public event Action OnInteractReleased;
+    public event Action OnExaminePressed;
+    public event Action OnExamineReleased;
     public bool IsInputEnabled { get; private set; } = true;
 
     private InputAction moveAction;
     private InputAction interactAction;
+    private InputAction examineAction;
     private void Awake()
     {
         ServiceLocator.Register<InputProvider>(this);
@@ -18,6 +21,7 @@ public class InputProvider : MonoBehaviour
         PlayerInput playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions["Move"];
         interactAction = playerInput.actions["Interact"];
+        interactAction = playerInput.actions["Examine"];
     }
     private void OnEnable()
     {
@@ -25,6 +29,8 @@ public class InputProvider : MonoBehaviour
         moveAction.canceled += OnMoveCanceled;
         interactAction.started += OnInteractPerformed;
         interactAction.canceled += OnInteractCanceled;
+        examineAction.started += OnExaminePerformed;
+        examineAction.canceled += OnExamineCanceled;
     }
     private void OnDisable()
     {
@@ -32,6 +38,8 @@ public class InputProvider : MonoBehaviour
         moveAction.canceled -= OnMoveCanceled;
         interactAction.started -= OnInteractPerformed;
         interactAction.canceled -= OnInteractCanceled;
+        examineAction.started -= OnExaminePerformed;
+        examineAction.canceled -= OnExamineCanceled;
     }
     public void EnableInput(bool enabled)
     {
@@ -58,5 +66,14 @@ public class InputProvider : MonoBehaviour
         if (!IsInputEnabled) return;
         OnInteractReleased?.Invoke();
     }
-
+    public void OnExaminePerformed(InputAction.CallbackContext context)
+    {
+        if (!IsInputEnabled) return;
+        OnExaminePressed?.Invoke();
+    }
+    public void OnExamineCanceled(InputAction.CallbackContext context)
+    {
+        if (!IsInputEnabled) return;
+        OnExamineReleased?.Invoke();
+    }
 }

@@ -28,4 +28,9 @@ public class Building : MonoBehaviour, IInteractable
         foreach (var handler in interactionHandlers)
             handler.OnInteract();
     }
+    public void OnExamine()
+    {
+        foreach (var handler in interactionHandlers)
+            handler.OnExamine();
+    }
 }

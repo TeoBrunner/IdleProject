@@ -7,16 +7,11 @@ public class BuildingIdentity : MonoBehaviour, IBuildingInteractionHandler
     [SerializeField] private string descriptionKey;
     public string NameKey => nameKey;
     public string DescriptionKey => descriptionKey;
-    public void OnInteract()
-    {
-    }
+    public void OnPlayerEnter() { }
+    public void OnPlayerExit() { }
+    public void OnInteract() { }
+    public void OnExamine() { }
 
-    public void OnPlayerEnter()
-    {
-    }
 
-    public void OnPlayerExit()
-    {
-    }
 
 }

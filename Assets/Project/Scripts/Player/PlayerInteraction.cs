@@ -10,24 +10,40 @@ public class PlayerInteraction : MonoBehaviour
     private void Start()
     {
         inputProvider = ServiceLocator.Get<InputProvider>();
-        if(inputProvider)
+        if (inputProvider)
+        {
             inputProvider.OnInteractPressed += HandleInteractPressed;
+            inputProvider.OnExaminePressed += HandleExaminePressed;
+        }
+            
     }
     private void OnEnable()
     {
-        if(inputProvider)
+        if (inputProvider)
+        {
             inputProvider.OnInteractPressed += HandleInteractPressed;
+            inputProvider.OnExaminePressed += HandleExaminePressed;
+        }
+            
     }
         
     private void OnDisable()
     {
         if (inputProvider)
+        {
             inputProvider.OnInteractPressed -= HandleInteractPressed;
+            inputProvider.OnExaminePressed -= HandleExaminePressed;
+        }
+            
     }
     private void HandleInteractPressed()
     {
         CurrentInteractable?.OnInteract();
     } 
+    private void HandleExaminePressed()
+    {
+        CurrentInteractable?.OnExamine();
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {

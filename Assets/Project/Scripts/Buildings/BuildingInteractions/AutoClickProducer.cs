@@ -51,4 +51,5 @@ public class AutoClickProducer : MonoBehaviour, IBuildingInteractionHandler
     }
 
     public void OnInteract() { }
+    public void OnExamine() { }
 }

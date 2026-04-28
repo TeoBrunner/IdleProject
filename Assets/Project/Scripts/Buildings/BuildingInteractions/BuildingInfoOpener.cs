@@ -9,19 +9,15 @@ public class BuildingInfoOpener : MonoBehaviour, IBuildingInteractionHandler
     {
         building = GetComponent<Building>();
         infoPanel = ServiceLocator.Get<BuildingInfoPanel>();
-    }
-    public void OnInteract()
-    {
-        infoPanel.Show(building);
-    }
-
-    public void OnPlayerEnter()
-    {
-
-    }
-
+    } 
+    public void OnPlayerEnter() { }
     public void OnPlayerExit()
     {
         infoPanel.Hide();
+    }
+    public void OnInteract() { }
+    public void OnExamine() 
+    {
+        infoPanel.Show(building);
     }
 }

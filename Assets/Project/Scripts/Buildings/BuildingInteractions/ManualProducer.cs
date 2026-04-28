@@ -16,14 +16,13 @@ public class ManualProducer : MonoBehaviour, IBuildingInteractionHandler
     {
         resourceManager = ServiceLocator.Get<ResourceManager>();
     }
-
+    public void OnPlayerEnter() { }
+    public void OnPlayerExit() { }
     public void OnInteract()
     {
         //if (!Config.HasManualClick) return;
         //resourceManager.Add(Config.ProducedResource, Config.GatherPerClick);
     }
+    public void OnExamine() { }
 
-    public void OnPlayerEnter() {}
-
-    public void OnPlayerExit() {}
 }

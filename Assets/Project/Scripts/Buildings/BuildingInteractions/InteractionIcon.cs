@@ -13,4 +13,5 @@ public class InteractionIcon : MonoBehaviour, IBuildingInteractionHandler
         icon.SetActive(false);
     }
     public void OnInteract() { }
+    public void OnExamine() { }
 }
