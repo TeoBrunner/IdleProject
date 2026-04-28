@@ -7,10 +7,10 @@ public class Building : MonoBehaviour, IInteractable
     private IBuildingInteractionHandler[] interactionHandlers;
 
     private ConfigProvider configProvider;
-    private BuildingConfig[] configs;
+    private BuildingMainConfig[] configs;
     private int level;
 
-    public BuildingConfig[] Configs => configs;
+    public BuildingMainConfig[] Configs => configs;
     public int Level => level;
     private void Awake()
     {
@@ -29,7 +29,7 @@ public class Building : MonoBehaviour, IInteractable
     {
         if (configProvider)
         {
-            configs = configProvider.GetConfigs<BuildingConfig>();
+            configs = configProvider.GetConfigs<BuildingMainConfig>();
         }
     }
     public void OnPlayerEnter()

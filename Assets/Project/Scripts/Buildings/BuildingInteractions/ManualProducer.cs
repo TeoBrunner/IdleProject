@@ -6,7 +6,7 @@ public class ManualProducer : MonoBehaviour, IBuildingInteractionHandler
 {
     private Building building;
     private ResourceManager resourceManager;
-    private BuildingConfig Config => building.Configs[building.Level];
+    private BuildingMainConfig Config => building.Configs[building.Level];
 
     private void Awake()
     {

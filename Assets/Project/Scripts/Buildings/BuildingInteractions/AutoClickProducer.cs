@@ -9,7 +9,7 @@ public class AutoClickProducer : MonoBehaviour, IBuildingInteractionHandler
     private bool isPlayerNearby;
     private float tickTimer;
 
-    private BuildingConfig Config => building.Configs[building.Level];
+    private BuildingMainConfig Config => building.Configs[building.Level];
     private void Awake()
     {
         building = GetComponent<Building>();

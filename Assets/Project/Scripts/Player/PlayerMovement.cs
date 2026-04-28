@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     private InputProvider inputProvider;
     private Rigidbody2D rb;
 
-    private PlayerConfig config;
+    private PlayerMainConfig config;
     private int level = 0;
     private float moveInput;
 
@@ -57,7 +57,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (configProvider)
         {
-            config = configProvider.GetConfigs<PlayerConfig>()[level];
+            config = configProvider.GetConfigs<PlayerMainConfig>()[level];
         }
     }
 
