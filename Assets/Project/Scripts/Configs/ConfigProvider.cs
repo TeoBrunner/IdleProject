@@ -73,6 +73,13 @@ public class ConfigProvider : MonoBehaviour
         Debug.LogError($"Config of type {typeof(T).Name} not found");
         return null;
     }
+    public Array GetConfigs(Type type)
+    {
+        if (configs.TryGetValue(type, out var array))
+            return array;
+        Debug.LogError($"Config of type {type.Name} not found");
+        return null;
+    }
 
     private void LoadAllConfigs()
     {

@@ -21,7 +21,7 @@ public class ResourceManager : MonoBehaviour
 
         if (amount <= 0)
         {
-            Debug.LogWarning($"ResourceManager.Add: amount must be non-negative. Trying to add: {amount}");
+            Debug.LogWarning($"ResourceManager.Add: amount must be non-negative. Trying to add: {amount} of {resource}");
             return;
         }
 
@@ -38,7 +38,7 @@ public class ResourceManager : MonoBehaviour
     {
         if (amount <= 0)
         {
-            Debug.LogWarning($"ResourceManager.TrySpend: amount must be non-negative. Trying to spend: {amount}");
+            Debug.LogWarning($"ResourceManager.TrySpend: amount must be non-negative. Trying to spend: {amount} of {resource}");
             return false;
         }
 

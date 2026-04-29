@@ -28,6 +28,8 @@ public class AltarFlameSystem : MonoBehaviour, IBuildingInteractionHandler
     private void Awake()
     {
         buildingConstruction = GetComponent<BuildingConstruction>();
+
+        ServiceLocator.Register<AltarFlameSystem>(this);
     }
     private void Start()
     {

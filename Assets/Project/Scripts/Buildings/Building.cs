@@ -6,6 +6,7 @@ public class Building : MonoBehaviour, IInteractable
     [SerializeField] string buildingID;
     private IBuildingInteractionHandler[] interactionHandlers;
 
+    public string BuildingID => buildingID;
     public bool IsEnabled { get; private set; } = true;
 
     private void Awake()

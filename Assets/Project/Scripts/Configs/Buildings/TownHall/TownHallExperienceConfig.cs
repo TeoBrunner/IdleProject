@@ -8,7 +8,10 @@ namespace Configs
         public readonly int ExpPointsRequired;
         public readonly int CumulativeExpPointsRequired;
 
-        public TownHallExperienceConfig(int expLevel, int expPointsRequired, int cumulativeExpPointsRequired)
+        public TownHallExperienceConfig(
+            int expLevel, 
+            int expPointsRequired, 
+            int cumulativeExpPointsRequired)
         {
             ExpLevel = expLevel;
             ExpPointsRequired = expPointsRequired;
