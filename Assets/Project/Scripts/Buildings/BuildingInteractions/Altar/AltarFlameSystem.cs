@@ -4,10 +4,14 @@ using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Building))]
+[RequireComponent(typeof(BuildingConstruction))]
 public class AltarFlameSystem : MonoBehaviour, IBuildingInteractionHandler
 {
     private AltarConstantsConfig[] constantsConfigs;
     private AltarFlameConfig[] flameConfigs;
+    private AltarUpgradeConfig[] upgradeConfigs;
+
+    private BuildingConstruction buildingConstruction;
 
     private int currentLevel = 1;
     private float currentFlame = 0f;
@@ -21,11 +25,16 @@ public class AltarFlameSystem : MonoBehaviour, IBuildingInteractionHandler
                                       .FlamePointsRequired ?? 0;
     public bool CanUpgrade => currentFlame >= RequiredFlame;
 
+    private void Awake()
+    {
+        buildingConstruction = GetComponent<BuildingConstruction>();
+    }
     private void Start()
     {
         var configProvider = ServiceLocator.Get<ConfigProvider>();
         constantsConfigs = configProvider.GetConfigs<AltarConstantsConfig>();
         flameConfigs = configProvider.GetConfigs<AltarFlameConfig>();
+        upgradeConfigs = configProvider.GetConfigs<AltarUpgradeConfig>();
 
         EventBus.Subscribe<BuildingClickedEvent>(OnBuildingClicked);
         EventBus.Subscribe<ResourceAddedEvent>(OnResourceAdded);
@@ -59,7 +68,23 @@ public class AltarFlameSystem : MonoBehaviour, IBuildingInteractionHandler
 
         EventBus.Publish(new AltarFlameChangedEvent(currentFlame, RequiredFlame, currentLevel));
     }
+    public void StartUpgrade()
+    {
+        if (!CanUpgrade || buildingConstruction == null) return;
 
+        var upgradeConfig = upgradeConfigs?.FirstOrDefault(c => c.CurrentUpgradeLevel == currentLevel);
+        int buildTime = upgradeConfig.UpgradeTime;
+
+        buildingConstruction.StartConstruction(buildTime, OnUpgradeComplete);
+    }
+
+    private void OnUpgradeComplete()
+    {
+        currentLevel++;
+        currentFlame = 0f;
+
+        EventBus.Publish(new AltarFlameChangedEvent(currentFlame, RequiredFlame, currentLevel));
+    }
     public void OnPlayerEnter() { }
     public void OnPlayerExit() { }
     public void OnInteract() { }
