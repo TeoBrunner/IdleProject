@@ -8,7 +8,7 @@ public class ResourceEntryView : MonoBehaviour
 
     public ResourceType Resource { get; private set; }
 
-    public void Initialize(ResourceType resource, int initialAmount)
+    public void Initialize(ResourceType resource, float initialAmount)
     {
         Resource = resource;
 
@@ -18,7 +18,7 @@ public class ResourceEntryView : MonoBehaviour
         UpdateAmount(initialAmount);
     }
 
-    public void UpdateAmount(int amount)
+    public void UpdateAmount(float amount)
     {
         amountText.text = amount.ToString();
     }

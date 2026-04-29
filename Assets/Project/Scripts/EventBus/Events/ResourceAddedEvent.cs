@@ -1,13 +1,17 @@
+using static Unity.VisualScripting.Member;
+
 namespace Events
 {
     public class ResourceAddedEvent
     {
         public readonly ResourceType ResourceType;
-        public readonly int Amount;
-        public ResourceAddedEvent(ResourceType type, int amount)
+        public readonly float Amount;
+        public readonly object Source;
+        public ResourceAddedEvent(ResourceType resourceType, float amount, object source = null)
         {
-            ResourceType = type;
+            ResourceType = resourceType;
             Amount = amount;
+            Source = source;
         }
     }
 }

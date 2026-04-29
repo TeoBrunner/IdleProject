@@ -14,6 +14,10 @@ public class AltarFlameHUD : MonoBehaviour
 
     private bool isInitialized;
 
+    private int lastLevel;
+    private float lastCurrentFlame;
+    private int lastRequiredFlame;
+
     private void Start()
     {
         gameObject.SetActive(false);
@@ -24,6 +28,7 @@ public class AltarFlameHUD : MonoBehaviour
     private void OnDestroy()
     {
         EventBus.Unsubscribe<AltarFlameChangedEvent>(OnFlameChanged);
+        UnsubscribeFromLocalization();
     }
 
     private void OnFlameChanged(AltarFlameChangedEvent e)
@@ -32,24 +37,53 @@ public class AltarFlameHUD : MonoBehaviour
         {
             isInitialized = true;
             gameObject.SetActive(true);
+            SubscribeToLocalization();
         }
 
-        UpdateDisplay(e.CurrentFlame, e.RequiredFlame, e.Level);
+        lastLevel = e.Level;
+        lastCurrentFlame = e.CurrentFlame;
+        lastRequiredFlame = e.RequiredFlame;
+
+        UpdateAll();
     }
 
-    private void UpdateDisplay(float current, int required, int level)
+    private void SubscribeToLocalization()
     {
-        if (!localizationProvider)
+        if (localizationProvider == null)
             localizationProvider = ServiceLocator.Get<LocalizationProvider>();
 
-        if (levelText != null)
-            levelText.text = $"{localizationProvider.GetString(LEVEL_KEY)} {level}";
+        if (localizationProvider != null)
+            localizationProvider.LocalizationUpdated += UpdateText;
+    }
 
+    private void UnsubscribeFromLocalization()
+    {
+        if (localizationProvider != null)
+            localizationProvider.LocalizationUpdated -= UpdateText;
+    }
 
+    private void UpdateAll()
+    {
+        UpdateText();
+        UpdateProgressBar();
+    }
+
+    private void UpdateText()
+    {
+        if (localizationProvider == null)
+            localizationProvider = ServiceLocator.Get<LocalizationProvider>();
+
+        if (localizationProvider == null || levelText == null) return;
+
+        levelText.text = $"{localizationProvider.GetString(LEVEL_KEY)} {lastLevel}";
+    }
+
+    private void UpdateProgressBar()
+    {
         if (progressBar != null)
         {
-            progressBar.maxValue = required;
-            progressBar.value = Mathf.Min(current, required);
+            progressBar.maxValue = lastRequiredFlame;
+            progressBar.value = Mathf.Min(lastCurrentFlame, lastRequiredFlame);
         }
     }
 }
