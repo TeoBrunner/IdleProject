@@ -45,6 +45,12 @@ GameObject:
   m_Component:
   - component: {fileID: 2431521792095471588}
   - component: {fileID: 6190653832185630020}
+  - component: {fileID: 9080979327661692352}
+  - component: {fileID: 8812987815236464115}
+  - component: {fileID: 5170054240805726994}
+  - component: {fileID: 1608795455891279293}
+  - component: {fileID: 4245730482261889940}
+  - component: {fileID: 9019152679978588654}
   - component: {fileID: 94930209591136262}
   m_Layer: 0
   m_Name: TownHall
@@ -81,6 +87,85 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f796fbd027b3801429711669f258457c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Building
+  buildingID: TownHall
+--- !u!114 &9080979327661692352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3198147265447131879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ea442dc5bb1eb24ea8a01d3902deac3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InfoOpener
+--- !u!114 &8812987815236464115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3198147265447131879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6ecb7b20d67aad4990a3b7f7b5a26e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingIdentity
+  nameKey: town_hall_name
+  descriptionKey: town_hall_desc
+--- !u!114 &5170054240805726994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3198147265447131879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb08d106cd600843828c5ad4085dc9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingExperience
+  currentLevel: 1
+  currentExp: 0
+--- !u!114 &1608795455891279293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3198147265447131879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9919be926b4e064db692674c827a438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ManualProducer
+  producedResource: 0
+--- !u!114 &4245730482261889940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3198147265447131879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64c2d64cae12a8d4e97b3dc6f05eafa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AutoProducer
+  producedResource: 0
+--- !u!114 &9019152679978588654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3198147265447131879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1789816cbdc77a64799a28b51d23501a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingClickTrigger
 --- !u!61 &94930209591136262
 BoxCollider2D:
   m_ObjectHideFlags: 0

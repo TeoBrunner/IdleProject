@@ -282,6 +282,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8363785669362493528}
+  - component: {fileID: 7763395424968624993}
+  - component: {fileID: 775654472627772952}
+  - component: {fileID: 2210580922556817876}
+  - component: {fileID: 1979388402719565098}
   - component: {fileID: 6647448519887442015}
   m_Layer: 0
   m_Name: Altar
@@ -306,6 +310,57 @@ Transform:
   - {fileID: 2466810859122812888}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7763395424968624993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2798893556503289938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f796fbd027b3801429711669f258457c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Building
+  buildingID: Altar
+--- !u!114 &775654472627772952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2798893556503289938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ea442dc5bb1eb24ea8a01d3902deac3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InfoOpener
+--- !u!114 &2210580922556817876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2798893556503289938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6ecb7b20d67aad4990a3b7f7b5a26e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingIdentity
+  nameKey: altar_name
+  descriptionKey: altar_desc
+--- !u!114 &1979388402719565098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2798893556503289938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 085ef1dd30dfb5741af3d30c66a61dc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AltarFlameSystem
 --- !u!61 &6647448519887442015
 BoxCollider2D:
   m_ObjectHideFlags: 0
