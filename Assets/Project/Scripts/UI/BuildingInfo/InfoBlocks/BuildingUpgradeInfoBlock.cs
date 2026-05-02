@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BuildingUpgradeInfoBlock : MonoBehaviour, IBuildingInfoBlock
+public class BuildingUpgradeInfoBlock : LocalizedComponent, IBuildingInfoBlock
 {
     [Header("Requirements")]
     [SerializeField] private BuildingUpgradeRequirementView altarLevelRequirement;
@@ -21,7 +21,6 @@ public class BuildingUpgradeInfoBlock : MonoBehaviour, IBuildingInfoBlock
     private BuildingExperience buildingExperience;
     private AltarFlameSystem altarFlameSystem;
     private ResourceManager resourceManager;
-    private LocalizationProvider localizationProvider;
 
     private const string ALTAR_LEVEL_KEY = "requirement_altar_level";
     private const string BUILDING_LEVEL_KEY = "requirement_building_level";
@@ -29,6 +28,13 @@ public class BuildingUpgradeInfoBlock : MonoBehaviour, IBuildingInfoBlock
     private const string WOOD_KEY = "wood";
     private const string STONE_KEY = "stone";
     private const string SHARDS_KEY = "shards";
+
+    private string altarLevelLabel;
+    private string buildingLevelLabel;
+    private string goldLabel;
+    private string woodLabel;
+    private string stoneLabel;
+    private string shardsLabel;
 
     private void Awake()
     {
@@ -40,50 +46,40 @@ public class BuildingUpgradeInfoBlock : MonoBehaviour, IBuildingInfoBlock
         upgradeButton.onClick.RemoveListener(OnUpgradeButtonClicked);
     }
 
-    private void Start()
+    protected override void RefreshLocalization()
     {
-        resourceManager = ServiceLocator.Get<ResourceManager>();
-        altarFlameSystem = ServiceLocator.Get<AltarFlameSystem>();
-        localizationProvider = ServiceLocator.Get<LocalizationProvider>();
-    }
+        altarLevelLabel = Localization.GetString(ALTAR_LEVEL_KEY);
+        buildingLevelLabel = Localization.GetString(BUILDING_LEVEL_KEY);
+        goldLabel = Localization.GetString(GOLD_KEY);
+        woodLabel = Localization.GetString(WOOD_KEY);
+        stoneLabel = Localization.GetString(STONE_KEY);
+        shardsLabel = Localization.GetString(SHARDS_KEY);
 
-    void OnEnable()
-    {
-        if (!localizationProvider) return;
-        localizationProvider.LocalizationUpdated += OnLocalizationUpdated;
-    }
-
-    void OnDisable()
-    {
-        if (!localizationProvider) return;
-        localizationProvider.LocalizationUpdated -= OnLocalizationUpdated;
-    }
-
-    private void OnLocalizationUpdated()
-    {
-        UpdateAllRequirements();
-        UpdateUpgradeButton();
+        if (buildingUpgrade != null)
+        {
+            UpdateAllRequirements();
+            UpdateUpgradeButton();
+        }
     }
 
     public void OnPanelOpen(Building building)
     {
         if (building.TryGetComponent<BuildingUpgrade>(out var upgrade))
         {
-            if (resourceManager == null) resourceManager = ServiceLocator.Get<ResourceManager>();
-            if (altarFlameSystem == null) altarFlameSystem = ServiceLocator.Get<AltarFlameSystem>();
-            if (localizationProvider == null) localizationProvider = ServiceLocator.Get<LocalizationProvider>();
-
             currentBuilding = building;
             buildingUpgrade = upgrade;
             buildingExperience = building.GetComponent<BuildingExperience>();
+
+            resourceManager = ServiceLocator.Get<ResourceManager>();
+            altarFlameSystem = ServiceLocator.Get<AltarFlameSystem>();
+
             gameObject.SetActive(true);
+
+            RefreshLocalization();
 
             EventBus.Subscribe<AltarFlameChangedEvent>(OnAltarFlameChanged);
             EventBus.Subscribe<BuildingExperienceChangedEvent>(OnBuildingExperienceChanged);
             EventBus.Subscribe<ResourceBalanceChangedEvent>(OnResourceBalanceChanged);
-
-            UpdateAllRequirements();
-            UpdateUpgradeButton();
         }
         else
         {
@@ -93,8 +89,6 @@ public class BuildingUpgradeInfoBlock : MonoBehaviour, IBuildingInfoBlock
 
     public void OnPanelClose()
     {
-        gameObject.SetActive(false);
-
         EventBus.Unsubscribe<AltarFlameChangedEvent>(OnAltarFlameChanged);
         EventBus.Unsubscribe<BuildingExperienceChangedEvent>(OnBuildingExperienceChanged);
         EventBus.Unsubscribe<ResourceBalanceChangedEvent>(OnResourceBalanceChanged);
@@ -102,6 +96,7 @@ public class BuildingUpgradeInfoBlock : MonoBehaviour, IBuildingInfoBlock
         currentBuilding = null;
         buildingUpgrade = null;
         buildingExperience = null;
+        gameObject.SetActive(false);
     }
 
     private void OnAltarFlameChanged(AltarFlameChangedEvent e) => UpdateAltarRequirement();
@@ -133,34 +128,28 @@ public class BuildingUpgradeInfoBlock : MonoBehaviour, IBuildingInfoBlock
         int current = altarFlameSystem.CurrentLevel;
         int required = buildingUpgrade.GetRequiredAltarLevel();
         bool met = current >= required;
-        string label = localizationProvider.GetString(ALTAR_LEVEL_KEY);
-        altarLevelRequirement.UpdateDisplay($"{label}: {current} / {required}", met);
+        altarLevelRequirement.UpdateDisplay($"{altarLevelLabel}: {current} / {required}", met);
     }
 
     private void UpdateBuildingLevelRequirement()
     {
         if (buildingExperience == null || buildingUpgrade == null) return;
-        if (!localizationProvider)
-            localizationProvider = ServiceLocator.Get<LocalizationProvider>();
         int current = buildingExperience.CurrentLevel;
         int required = buildingUpgrade.GetRequiredExperienceLevel();
         bool met = current >= required;
-        string label = localizationProvider.GetString(BUILDING_LEVEL_KEY);
-        buildingLevelRequirement.UpdateDisplay($"{label}: {current} / {required}", met);
+        buildingLevelRequirement.UpdateDisplay($"{buildingLevelLabel}: {current} / {required}", met);
     }
 
     private void UpdateResourceRequirements()
     {
         if (buildingUpgrade == null || resourceManager == null) return;
-        if (!localizationProvider)
-            localizationProvider = ServiceLocator.Get<LocalizationProvider>();
-        UpdateResourceRequirement(ResourceType.Gold, goldRequirement, GOLD_KEY);
-        UpdateResourceRequirement(ResourceType.Wood, woodRequirement, WOOD_KEY);
-        UpdateResourceRequirement(ResourceType.Stone, stoneRequirement, STONE_KEY);
-        UpdateResourceRequirement(ResourceType.Shards, shardsRequirement, SHARDS_KEY);
+        UpdateResourceRequirement(ResourceType.Gold, goldRequirement, goldLabel);
+        UpdateResourceRequirement(ResourceType.Wood, woodRequirement, woodLabel);
+        UpdateResourceRequirement(ResourceType.Stone, stoneRequirement, stoneLabel);
+        UpdateResourceRequirement(ResourceType.Shards, shardsRequirement, shardsLabel);
     }
 
-    private void UpdateResourceRequirement(ResourceType type, BuildingUpgradeRequirementView view, string resourceKey)
+    private void UpdateResourceRequirement(ResourceType type, BuildingUpgradeRequirementView view, string resourceLabel)
     {
         if (view == null) return;
 
@@ -175,8 +164,7 @@ public class BuildingUpgradeInfoBlock : MonoBehaviour, IBuildingInfoBlock
         view.gameObject.SetActive(true);
         int current = (int)resourceManager.GetBalance(type);
         bool met = current >= required;
-        string resourceName = localizationProvider.GetString(resourceKey);
-        view.UpdateDisplay($"{resourceName}: {current} / {required}", met);
+        view.UpdateDisplay($"{resourceLabel}: {current} / {required}", met);
     }
 
     private void UpdateUpgradeButton()
@@ -188,7 +176,7 @@ public class BuildingUpgradeInfoBlock : MonoBehaviour, IBuildingInfoBlock
     public void OnUpgradeButtonClicked()
     {
         ServiceLocator.Get<BuildingInfoPanel>()?.Hide();
-
         buildingUpgrade?.StartUpgrade();
     }
+
 }

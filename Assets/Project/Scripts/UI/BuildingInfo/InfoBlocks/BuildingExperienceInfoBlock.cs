@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BuildingExperienceInfoBlock : MonoBehaviour, IBuildingInfoBlock
+public class BuildingExperienceInfoBlock : LocalizedComponent, IBuildingInfoBlock
 {
     [SerializeField] private TMP_Text levelText;
     [SerializeField] private TMP_Text currentExpText;
@@ -12,29 +12,20 @@ public class BuildingExperienceInfoBlock : MonoBehaviour, IBuildingInfoBlock
 
     private Building currentBuilding;
     private BuildingExperience buildingExperience;
-    private LocalizationProvider localizationProvider;
 
     private const string LEVEL_KEY = "level";
     private const string MAX_KEY = "max";
 
-    private void Start()
-    {
-        localizationProvider = ServiceLocator.Get<LocalizationProvider>();
-    }
-    void OnEnable()
-    {
-        if (!localizationProvider)
-            return;
+    private string levelLabel;
+    private string maxLabel;
 
-        UpdateText();
-        localizationProvider.LocalizationUpdated += UpdateText;
-    }
-    void OnDisable()
+    protected override void RefreshLocalization()
     {
-        if (!localizationProvider)
-            return;
+        levelLabel = Localization.GetString(LEVEL_KEY);
+        maxLabel = Localization.GetString(MAX_KEY);
 
-        localizationProvider.LocalizationUpdated -= UpdateText;
+        if (buildingExperience != null)
+            UpdateContent();
     }
 
     public void OnPanelOpen(Building building)
@@ -44,7 +35,8 @@ public class BuildingExperienceInfoBlock : MonoBehaviour, IBuildingInfoBlock
             currentBuilding = building;
             buildingExperience = experience;
             gameObject.SetActive(true);
-            UpdateContent();
+
+            RefreshLocalization();
             EventBus.Subscribe<BuildingExperienceChangedEvent>(OnExperienceChanged);
         }
         else
@@ -55,44 +47,43 @@ public class BuildingExperienceInfoBlock : MonoBehaviour, IBuildingInfoBlock
 
     public void OnPanelClose()
     {
+        EventBus.Unsubscribe<BuildingExperienceChangedEvent>(OnExperienceChanged);
+        buildingExperience = null;
+        currentBuilding = null;
         gameObject.SetActive(false);
-
-        if (buildingExperience != null)
-        {
-            EventBus.Unsubscribe<BuildingExperienceChangedEvent>(OnExperienceChanged);
-            buildingExperience = null;
-            currentBuilding = null;
-        }
     }
 
     private void OnExperienceChanged(BuildingExperienceChangedEvent e)
     {
         if (e.Building != currentBuilding) return;
-        UpdateContent(e);
+        UpdateContent();
     }
 
-    private void UpdateContent(BuildingExperienceChangedEvent e = null)
+    private void UpdateContent()
     {
         if (buildingExperience == null) return;
-
-        if(!localizationProvider)
-            localizationProvider = ServiceLocator.Get<LocalizationProvider>();
 
         int level = buildingExperience.CurrentLevel;
         int current = buildingExperience.CurrentExpInt;
         int required = buildingExperience.RequiredExp;
+        bool isMax = buildingExperience.IsMaxLevel;
 
-        UpdateText();
+        if (levelText != null)
+        {
+            levelText.text = isMax
+                ? $"{levelLabel} {level} ({maxLabel})"
+                : $"{levelLabel} {level}";
+        }
 
         if (currentExpText != null)
             currentExpText.text = current.ToString();
 
         if (requiredExpText != null)
-            requiredExpText.text = buildingExperience.IsMaxLevel ? "-" : required.ToString();
+            requiredExpText.text = isMax ? "-" : required.ToString();
 
         if (progressBar != null)
         {
-            if (buildingExperience.IsMaxLevel)
+            if (isMax)
             {
                 progressBar.maxValue = 1;
                 progressBar.value = 1;
@@ -103,23 +94,5 @@ public class BuildingExperienceInfoBlock : MonoBehaviour, IBuildingInfoBlock
                 progressBar.value = Mathf.Min(current, required);
             }
         }
-    }
-
-    private void UpdateText()
-    {
-        if (!localizationProvider)
-            localizationProvider = ServiceLocator.Get<LocalizationProvider>();
-
-        int level = buildingExperience.CurrentLevel;
-
-        if (levelText != null)
-        {
-            string levelLabel = localizationProvider.GetString(LEVEL_KEY) ?? "Level";
-            levelText.text = buildingExperience.IsMaxLevel
-                ? $"{levelLabel} {level} ({localizationProvider.GetString(MAX_KEY) ?? "MAX"})"
-                : $"{levelLabel} {level}";
-        }
-
-
     }
 }

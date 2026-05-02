@@ -1,33 +1,25 @@
 using TMPro;
 using UnityEngine;
 
-public class ManualProductionInfoBlock : MonoBehaviour, IBuildingInfoBlock
+public class ManualProductionInfoBlock : LocalizedComponent, IBuildingInfoBlock
 {
     [SerializeField] private TMP_Text infoText;
 
     private ManualProducer manualProducer;
-    private LocalizationProvider localizationProvider;
 
     private const string INTERACT_KEY = "interact";
-    private void Start()
-    {
-        localizationProvider = ServiceLocator.Get<LocalizationProvider>();
-    }
-    void OnEnable()
-    {
-        if (!localizationProvider)
-            return;
 
-        UpdateContent();
-        localizationProvider.LocalizationUpdated += UpdateContent;
-    }
+    private string resourceName;
+    private string interactText;
 
-    void OnDisable()
+    protected override void RefreshLocalization()
     {
-        if (!localizationProvider)
-            return;
-
-        localizationProvider.LocalizationUpdated -= UpdateContent;
+        if (manualProducer != null)
+        {
+            resourceName = Localization.GetString(manualProducer.ProducedResource.ToString().ToLower());
+            interactText = Localization.GetString(INTERACT_KEY);
+            UpdateContent();
+        }
     }
 
     public void OnPanelOpen(Building building)
@@ -36,7 +28,8 @@ public class ManualProductionInfoBlock : MonoBehaviour, IBuildingInfoBlock
         {
             manualProducer = producer;
             gameObject.SetActive(true);
-            UpdateContent();
+
+            RefreshLocalization();
         }
         else
         {
@@ -54,13 +47,7 @@ public class ManualProductionInfoBlock : MonoBehaviour, IBuildingInfoBlock
     {
         if (manualProducer == null || infoText == null) return;
 
-        if(!localizationProvider)
-            localizationProvider = ServiceLocator.Get<LocalizationProvider>();
-
-        string resourceName = localizationProvider.GetString(manualProducer.ProducedResource.ToString().ToLower());
         float amount = manualProducer.GatherPerClick;
-        string interact = localizationProvider.GetString(INTERACT_KEY);
-
-        infoText.text = $"{resourceName}: +{amount} / {interact}";
+        infoText.text = $"{resourceName}: +{amount} / {interactText}";
     }
 }

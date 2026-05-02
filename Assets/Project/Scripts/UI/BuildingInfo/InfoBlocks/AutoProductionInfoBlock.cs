@@ -1,33 +1,25 @@
 using TMPro;
 using UnityEngine;
 
-public class AutoProductionInfoBlock : MonoBehaviour, IBuildingInfoBlock
+public class AutoProductionInfoBlock : LocalizedComponent, IBuildingInfoBlock
 {
     [SerializeField] private TMP_Text infoText;
 
     private AutoProducer autoProducer;
-    private LocalizationProvider localizationProvider;
 
     private const string SEC_KEY = "sec";
-    private void Start()
-    {
-        localizationProvider = ServiceLocator.Get<LocalizationProvider>();
-    }
-    void OnEnable()
-    {
-        if (!localizationProvider)
-            return;
 
-        UpdateContent();
-        localizationProvider.LocalizationUpdated += UpdateContent;
-    }
+    private string resourceName;
+    private string secText;
 
-    void OnDisable()
+    protected override void RefreshLocalization()
     {
-        if (!localizationProvider)
-            return;
-
-        localizationProvider.LocalizationUpdated -= UpdateContent;
+        if (autoProducer != null)
+        {
+            resourceName = Localization.GetString(autoProducer.ProducedResource.ToString().ToLower());
+            secText = Localization.GetString(SEC_KEY);
+            UpdateContent();
+        }
     }
 
     public void OnPanelOpen(Building building)
@@ -36,7 +28,8 @@ public class AutoProductionInfoBlock : MonoBehaviour, IBuildingInfoBlock
         {
             autoProducer = producer;
             gameObject.SetActive(true);
-            UpdateContent();
+
+            RefreshLocalization();
         }
         else
         {
@@ -54,14 +47,9 @@ public class AutoProductionInfoBlock : MonoBehaviour, IBuildingInfoBlock
     {
         if (autoProducer == null || infoText == null) return;
 
-        if (!localizationProvider)
-            localizationProvider = ServiceLocator.Get<LocalizationProvider>();
-
-        string resourceName = localizationProvider.GetString(autoProducer.ProducedResource.ToString().ToLower());
         float amount = autoProducer.GatherPerAutoClick;
         float interval = autoProducer.AutoClickInterval;
-        string sec = localizationProvider.GetString(SEC_KEY);
 
-        infoText.text = $"{resourceName}: +{amount} / {interval:F1} {sec}";
+        infoText.text = $"{resourceName}: +{amount} / {interval:F1} {secText}";
     }
 }

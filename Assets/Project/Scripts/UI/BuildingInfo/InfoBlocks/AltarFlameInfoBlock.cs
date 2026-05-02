@@ -3,45 +3,35 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AltarFlameInfoBlock : MonoBehaviour, IBuildingInfoBlock
+public class AltarFlameInfoBlock : LocalizedComponent, IBuildingInfoBlock
 {
     [SerializeField] private TMP_Text levelText;
     [SerializeField] private TMP_Text currentFlameText;
     [SerializeField] private TMP_Text requiredFlameText;
     [SerializeField] private Slider progressBar;
 
+    private AltarFlameSystem altarFlameSystem;
+
     private const string LEVEL_KEY = "level";
 
-    private AltarFlameSystem altarFlameSystem;
-    private LocalizationProvider localizationProvider;
+    private string levelLabel;
 
-    private void Start()
+    protected override void RefreshLocalization()
     {
-        localizationProvider = ServiceLocator.Get<LocalizationProvider>();
-    }
-    void OnEnable()
-    {
-        if (!localizationProvider)
-            return;
+        levelLabel = Localization.GetString(LEVEL_KEY);
 
-        UpdateText();
-        localizationProvider.LocalizationUpdated += UpdateText;        
+        if (altarFlameSystem != null)
+            UpdateContent();
     }
 
-    void OnDisable()
-    {
-        if (!localizationProvider)
-            return;
-
-        localizationProvider.LocalizationUpdated -= UpdateText;
-    }
     public void OnPanelOpen(Building building)
     {
         if (building.TryGetComponent<AltarFlameSystem>(out var system))
         {
             altarFlameSystem = system;
             gameObject.SetActive(true);
-            UpdateContent();
+
+            RefreshLocalization();
             EventBus.Subscribe<AltarFlameChangedEvent>(OnFlameChanged);
         }
         else
@@ -52,33 +42,26 @@ public class AltarFlameInfoBlock : MonoBehaviour, IBuildingInfoBlock
 
     public void OnPanelClose()
     {
+        EventBus.Unsubscribe<AltarFlameChangedEvent>(OnFlameChanged);
+        altarFlameSystem = null;
         gameObject.SetActive(false);
-
-        if (altarFlameSystem != null)
-        {
-            EventBus.Unsubscribe<AltarFlameChangedEvent>(OnFlameChanged);
-            altarFlameSystem = null;
-        }
     }
 
     private void OnFlameChanged(AltarFlameChangedEvent e)
     {
-        UpdateContent(e);
+        UpdateContent();
     }
 
-    private void UpdateContent(AltarFlameChangedEvent e = null)
+    private void UpdateContent()
     {
         if (altarFlameSystem == null) return;
 
-        if (!localizationProvider)
-            localizationProvider = ServiceLocator.Get<LocalizationProvider>();
-
+        int level = altarFlameSystem.CurrentLevel;
         float current = altarFlameSystem.CurrentFlame;
         int required = altarFlameSystem.RequiredFlame;
-        int level = altarFlameSystem.CurrentLevel;
 
         if (levelText != null)
-            levelText.text = $"{localizationProvider.GetString(LEVEL_KEY)} {level}";
+            levelText.text = $"{levelLabel} {level}";
 
         if (currentFlameText != null)
             currentFlameText.text = current.ToString();
@@ -91,15 +74,5 @@ public class AltarFlameInfoBlock : MonoBehaviour, IBuildingInfoBlock
             progressBar.maxValue = required;
             progressBar.value = Mathf.Min(current, required);
         }
-    }
-    private void UpdateText()
-    {
-        if (!localizationProvider)
-            localizationProvider = ServiceLocator.Get<LocalizationProvider>();
-
-        int level = altarFlameSystem.CurrentLevel;
-
-        if (levelText != null)
-            levelText.text = $"{localizationProvider.GetString("level")} {level}";
     }
 }

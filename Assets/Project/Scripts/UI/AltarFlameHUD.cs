@@ -3,14 +3,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AltarFlameHUD : MonoBehaviour
+public class AltarFlameHUD : LocalizedComponent
 {
     [SerializeField] private Slider progressBar;
     [SerializeField] private TMP_Text levelText;
-
-    private const string LEVEL_KEY = "level_short";
-
-    private LocalizationProvider localizationProvider;
 
     private bool isInitialized;
 
@@ -18,10 +14,13 @@ public class AltarFlameHUD : MonoBehaviour
     private float lastCurrentFlame;
     private int lastRequiredFlame;
 
+    private const string LEVEL_KEY = "level_short";
+
+    private string levelLabel;
+
     private void Start()
     {
         gameObject.SetActive(false);
-
         EventBus.Subscribe<AltarFlameChangedEvent>(OnFlameChanged);
     }
 
@@ -29,6 +28,13 @@ public class AltarFlameHUD : MonoBehaviour
     {
         EventBus.Unsubscribe<AltarFlameChangedEvent>(OnFlameChanged);
         UnsubscribeFromLocalization();
+        EventBus.Unsubscribe<AltarFlameChangedEvent>(OnFlameChanged);
+    }
+
+    protected override void RefreshLocalization()
+    {
+        levelLabel = Localization.GetString(LEVEL_KEY);
+        UpdateText();
     }
 
     private void OnFlameChanged(AltarFlameChangedEvent e)
@@ -37,6 +43,7 @@ public class AltarFlameHUD : MonoBehaviour
         {
             isInitialized = true;
             gameObject.SetActive(true);
+            RefreshLocalization();
             SubscribeToLocalization();
         }
 
@@ -49,17 +56,14 @@ public class AltarFlameHUD : MonoBehaviour
 
     private void SubscribeToLocalization()
     {
-        if (localizationProvider == null)
-            localizationProvider = ServiceLocator.Get<LocalizationProvider>();
-
-        if (localizationProvider != null)
-            localizationProvider.LocalizationUpdated += UpdateText;
+        if (Localization != null)
+            Localization.LocalizationUpdated += RefreshLocalization;
     }
 
     private void UnsubscribeFromLocalization()
     {
-        if (localizationProvider != null)
-            localizationProvider.LocalizationUpdated -= UpdateText;
+        if (Localization != null)
+            Localization.LocalizationUpdated -= RefreshLocalization;
     }
 
     private void UpdateAll()
@@ -70,12 +74,8 @@ public class AltarFlameHUD : MonoBehaviour
 
     private void UpdateText()
     {
-        if (localizationProvider == null)
-            localizationProvider = ServiceLocator.Get<LocalizationProvider>();
-
-        if (localizationProvider == null || levelText == null) return;
-
-        levelText.text = $"{localizationProvider.GetString(LEVEL_KEY)} {lastLevel}";
+        if (string.IsNullOrEmpty(levelLabel) || levelText == null) return;
+        levelText.text = $"{levelLabel} {lastLevel}";
     }
 
     private void UpdateProgressBar()
@@ -86,4 +86,5 @@ public class AltarFlameHUD : MonoBehaviour
             progressBar.value = Mathf.Min(lastCurrentFlame, lastRequiredFlame);
         }
     }
+
 }

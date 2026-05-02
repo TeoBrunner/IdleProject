@@ -1,27 +1,29 @@
 using TMPro;
 using UnityEngine;
 
-public class BuildingHeaderBlock : MonoBehaviour, IBuildingInfoBlock
+public class BuildingHeaderBlock : LocalizedComponent, IBuildingInfoBlock
 {
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private TMP_Text descriptionText;
 
-    private LocalizationProvider localizationProvider;
     private BuildingIdentity buildingIdentity;
-    private void Start()
+
+    protected override void RefreshLocalization()
     {
-        localizationProvider = ServiceLocator.Get<LocalizationProvider>();
+        if (buildingIdentity == null) return;
+
+        nameText.text = Localization.GetString(buildingIdentity.NameKey);
+        descriptionText.text = Localization.GetString(buildingIdentity.DescriptionKey);
     }
+
     public void OnPanelOpen(Building building)
     {
-        if (building.TryGetComponent<BuildingIdentity>(out var buildingIdentity))
+        if (building.TryGetComponent<BuildingIdentity>(out var identity))
         {
+            buildingIdentity = identity;
             gameObject.SetActive(true);
 
-            this.buildingIdentity = buildingIdentity;
-            UpdateContent();
-            localizationProvider.LocalizationUpdated += UpdateContent;
-
+            RefreshLocalization();
         }
         else
         {
@@ -29,20 +31,10 @@ public class BuildingHeaderBlock : MonoBehaviour, IBuildingInfoBlock
             gameObject.SetActive(false);
         }
     }
+
     public void OnPanelClose()
     {
+        buildingIdentity = null;
         gameObject.SetActive(false);
-        if(buildingIdentity != null)
-        {
-            localizationProvider.LocalizationUpdated -= UpdateContent;
-        }
-    }
-    private void UpdateContent()
-    {
-        if (localizationProvider == null)
-            localizationProvider = ServiceLocator.Get<LocalizationProvider>();
-
-        nameText.text = localizationProvider.GetString(buildingIdentity.NameKey);
-        descriptionText.text = localizationProvider.GetString(buildingIdentity.DescriptionKey);
     }
 }
