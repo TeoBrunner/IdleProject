@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(Building))]
 [RequireComponent(typeof(BuildingExperience))]
 [RequireComponent(typeof(BuildingConstruction))]
-public class BuildingUpgrade : MonoBehaviour
+public class BuildingUpgrade : ConfigurableComponent
 {
     private Building building;
     private BuildingExperience buildingExperience;
@@ -36,23 +36,23 @@ public class BuildingUpgrade : MonoBehaviour
         altarFlameSystem = ServiceLocator.Get<AltarFlameSystem>();
 
         LoadConfigs();
-        UpdateCurrentConfig();
     }
 
-    private void LoadConfigs()
+    protected override void LoadConfigs()
     {
-        var configProvider = ServiceLocator.Get<ConfigProvider>();
         string typeName = $"{CONFIG_TYPE_PREFIX}{building.BuildingID}{CONFIG_TYPE_POSTFIX}";
         Type type = Type.GetType(typeName);
 
         if (type != null)
         {
-            var configsArray = configProvider.GetConfigs(type);
+            var configsArray = Configs.GetConfigs(type);
             if (configsArray != null)
             {
                 upgradeConfigs = configsArray.OfType<BaseUpgradeConfig>().ToArray();
             }
         }
+
+        UpdateCurrentConfig();
     }
 
     private void UpdateCurrentConfig()
@@ -88,6 +88,7 @@ public class BuildingUpgrade : MonoBehaviour
 
         buildingConstruction.StartConstruction(currentUpgradeConfig.UpgradeTime, OnUpgradeComplete);
     }
+
     private void OnUpgradeComplete()
     {
         CurrentUpgradeLevel++;

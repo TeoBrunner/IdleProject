@@ -2,7 +2,7 @@ using Configs;
 using UnityEngine;
 
 [RequireComponent(typeof(Building))]
-public class ManualProducer : MonoBehaviour, IBuildingInteractionHandler
+public class ManualProducer : ConfigurableComponent, IBuildingInteractionHandler
 {
     [SerializeField] private ResourceType producedResource = ResourceType.Gold;
 
@@ -12,9 +12,8 @@ public class ManualProducer : MonoBehaviour, IBuildingInteractionHandler
     private ResourceManager resourceManager;
     private TownHallConstantsConfig[] constantsConfigs;
 
-    private float gatherPerClick;
     public ResourceType ProducedResource => producedResource;
-    public float GatherPerClick => gatherPerClick;
+    public float GatherPerClick => constantsConfigs.GetConstant(GATHER_PER_CLICK_KEY);
 
     private void Awake()
     {
@@ -24,21 +23,25 @@ public class ManualProducer : MonoBehaviour, IBuildingInteractionHandler
     private void Start()
     {
         resourceManager = ServiceLocator.Get<ResourceManager>();
-
-        var configProvider = ServiceLocator.Get<ConfigProvider>();
-        constantsConfigs = configProvider.GetConfigs<TownHallConstantsConfig>();
-
-        gatherPerClick = constantsConfigs.GetConstant(GATHER_PER_CLICK_KEY);
+        LoadConfigs();
     }
+
+    protected override void LoadConfigs()
+    {
+        constantsConfigs = Configs.GetConfigs<TownHallConstantsConfig>();
+    }
+
     public void OnPlayerEnter() { }
     public void OnPlayerExit() { }
+
     public void OnInteract()
     {
         if (resourceManager == null || constantsConfigs == null) return;
 
-        if (gatherPerClick <= 0) return;
+        if (GatherPerClick <= 0) return;
 
-        resourceManager.Add(producedResource, gatherPerClick, source: building);
+        resourceManager.Add(producedResource, GatherPerClick, source: building);
     }
+
     public void OnExamine() { }
 }

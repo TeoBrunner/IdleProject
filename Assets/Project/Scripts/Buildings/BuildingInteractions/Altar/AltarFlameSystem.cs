@@ -5,7 +5,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Building))]
 [RequireComponent(typeof(BuildingConstruction))]
-public class AltarFlameSystem : MonoBehaviour, IBuildingInteractionHandler
+public class AltarFlameSystem : ConfigurableComponent, IBuildingInteractionHandler
 {
     private AltarConstantsConfig[] constantsConfigs;
     private AltarFlameConfig[] flameConfigs;
@@ -28,18 +28,22 @@ public class AltarFlameSystem : MonoBehaviour, IBuildingInteractionHandler
     private void Awake()
     {
         buildingConstruction = GetComponent<BuildingConstruction>();
-
         ServiceLocator.Register<AltarFlameSystem>(this);
     }
+
     private void Start()
     {
-        var configProvider = ServiceLocator.Get<ConfigProvider>();
-        constantsConfigs = configProvider.GetConfigs<AltarConstantsConfig>();
-        flameConfigs = configProvider.GetConfigs<AltarFlameConfig>();
-        upgradeConfigs = configProvider.GetConfigs<AltarUpgradeConfig>();
+        LoadConfigs();
 
         EventBus.Subscribe<BuildingClickedEvent>(OnBuildingClicked);
         EventBus.Subscribe<ResourceAddedEvent>(OnResourceAdded);
+    }
+
+    protected override void LoadConfigs()
+    {
+        constantsConfigs = Configs.GetConfigs<AltarConstantsConfig>();
+        flameConfigs = Configs.GetConfigs<AltarFlameConfig>();
+        upgradeConfigs = Configs.GetConfigs<AltarUpgradeConfig>();
     }
 
     private void OnDestroy()
@@ -70,6 +74,7 @@ public class AltarFlameSystem : MonoBehaviour, IBuildingInteractionHandler
 
         EventBus.Publish(new AltarFlameChangedEvent(currentFlame, RequiredFlame, currentLevel));
     }
+
     public void StartUpgrade()
     {
         if (!CanUpgrade || buildingConstruction == null) return;
@@ -87,6 +92,7 @@ public class AltarFlameSystem : MonoBehaviour, IBuildingInteractionHandler
 
         EventBus.Publish(new AltarFlameChangedEvent(currentFlame, RequiredFlame, currentLevel));
     }
+
     public void OnPlayerEnter() { }
     public void OnPlayerExit() { }
     public void OnInteract() { }

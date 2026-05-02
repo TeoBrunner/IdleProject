@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Building))]
-public class BuildingExperience : MonoBehaviour, IBuildingInteractionHandler
+public class BuildingExperience : ConfigurableComponent, IBuildingInteractionHandler
 {
     [SerializeField] private int currentLevel = 1;
     [SerializeField] private float currentExp;
@@ -28,14 +28,18 @@ public class BuildingExperience : MonoBehaviour, IBuildingInteractionHandler
 
     private void Start()
     {
-        var configProvider = ServiceLocator.Get<ConfigProvider>();
-        constantsConfigs = configProvider.GetConfigs<TownHallConstantsConfig>();
-        experienceConfigs = configProvider.GetConfigs<TownHallExperienceConfig>();
+        LoadConfigs();
 
         EventBus.Subscribe<BuildingClickedEvent>(OnBuildingClicked);
         EventBus.Subscribe<ResourceAddedEvent>(OnResourceAdded);
 
         PublishChangeEvent();
+    }
+
+    protected override void LoadConfigs()
+    {
+        constantsConfigs = Configs.GetConfigs<TownHallConstantsConfig>();
+        experienceConfigs = Configs.GetConfigs<TownHallExperienceConfig>();
     }
 
     private void OnDestroy()

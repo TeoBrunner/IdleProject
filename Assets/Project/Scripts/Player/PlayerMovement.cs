@@ -1,11 +1,11 @@
 using Configs;
 using UnityEngine;
+
 [RequireComponent(typeof(Rigidbody2D))]
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : ConfigurableComponent
 {
     [SerializeField] Transform spriteParent;
 
-    private ConfigProvider configProvider;
     private InputProvider inputProvider;
     private Rigidbody2D rb;
 
@@ -14,57 +14,56 @@ public class PlayerMovement : MonoBehaviour
     private float moveInput;
 
     public bool IsFacingRight { get; private set; } = true;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
     }
+
     private void Start()
     {
-        configProvider = ServiceLocator.Get<ConfigProvider>();
-        if (configProvider)
-        {
-            UpdateConfig();
-            configProvider.ConfigUpdated += UpdateConfig;
-        }
-
         inputProvider = ServiceLocator.Get<InputProvider>();
-        if(inputProvider)
+        if (inputProvider)
+            inputProvider.OnMove += HandleMoveInput;
+
+        LoadConfigs();
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+
+        if (inputProvider)
             inputProvider.OnMove += HandleMoveInput;
     }
-    private void OnEnable()
-    {
-        if(configProvider)
-            configProvider.ConfigUpdated += UpdateConfig;
 
-        if (inputProvider) 
-            inputProvider.OnMove += HandleMoveInput;
-    }  
-    void OnDisable() 
+    protected override void OnDisable()
     {
-        if (configProvider)
-            configProvider.ConfigUpdated -= UpdateConfig;
+        base.OnDisable();
 
         if (inputProvider)
             inputProvider.OnMove -= HandleMoveInput;
     }
+
     private void FixedUpdate()
     {
         ApplyMovement();
         UpdateFacing();
     }
 
-    private void UpdateConfig()
+    protected override void LoadConfigs()
     {
-        if (configProvider)
-        {
-            config = configProvider.GetConfigs<PlayerMainConfig>()[level];
-        }
+        var configs = Configs.GetConfigs<PlayerMainConfig>();
+        if (configs != null && level >= 0 && level < configs.Length)
+            config = configs[level];
     }
 
     private void HandleMoveInput(float value) => moveInput = value;
 
     private void ApplyMovement()
     {
+        if (config == null) return;
+
         float targetVelocity = moveInput * config.MaxSpeed;
         float currentVelocity = rb.linearVelocity.x;
 
@@ -92,6 +91,4 @@ public class PlayerMovement : MonoBehaviour
             spriteParent.localScale.z);
         spriteParent.localScale = newLocalScale;
     }
-
-
 }
