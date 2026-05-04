@@ -18,4 +18,22 @@ public class TestButtons : MonoBehaviour
     {
         ServiceLocator.Get<ResourceManager>().Add(ResourceType.Workers, 10);
     }
+
+    public void ToggleFullscreen()
+    {
+        bool isFullscreen = Screen.fullScreen;
+
+        if (isFullscreen)
+        {
+            Screen.SetResolution(800, 600, FullScreenMode.Windowed);
+        }
+        else
+        {
+            Screen.SetResolution(
+                Display.main.systemWidth,
+                Display.main.systemHeight,
+                FullScreenMode.FullScreenWindow
+            );
+        }
+    }
 }
