@@ -50,7 +50,7 @@ public class ResourceManager : MonoBehaviour
         EventBus.Publish(new ResourceBalanceChangedEvent(resource, balances[resource]));
         return true;
     }
-    public bool HasEnough(ResourceType resource, int amount)
+    public bool HasEnough(ResourceType resource, float amount)
     {
         return GetBalance(resource) >= amount;
     }

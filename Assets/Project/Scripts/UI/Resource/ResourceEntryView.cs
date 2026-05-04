@@ -1,9 +1,11 @@
+using Mono.Cecil;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-public class ResourceEntryView : MonoBehaviour
+public class ResourceEntryView : LocalizedComponent
 {
     [SerializeField] private Image icon;
+    [SerializeField] private TextMeshProUGUI resourceText;
     [SerializeField] private TextMeshProUGUI amountText;
 
     public ResourceType Resource { get; private set; }
@@ -14,6 +16,7 @@ public class ResourceEntryView : MonoBehaviour
 
         //icon.sprite  = resource.Icon;
         //icon.enabled = resource.Icon != null;
+        resourceText.text = Localization.GetString(Resource.ToString().ToLower());
 
         UpdateAmount(initialAmount);
     }
@@ -21,5 +24,10 @@ public class ResourceEntryView : MonoBehaviour
     public void UpdateAmount(float amount)
     {
         amountText.text = amount.ToString();
+    }
+
+    protected override void RefreshLocalization()
+    {
+        resourceText.text = Localization.GetString(Resource.ToString().ToLower());
     }
 }
