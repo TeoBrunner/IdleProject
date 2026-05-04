@@ -4,8 +4,6 @@ using UnityEngine.SceneManagement;
 
 public class TestButtons : MonoBehaviour
 {
-    [SerializeField] private Building targetBuilding;
-    [SerializeField] private int goldPerClick = 10;
     public void RestartScene()
     {
         ServiceLocator.Clear();
@@ -16,28 +14,8 @@ public class TestButtons : MonoBehaviour
     {
         ServiceLocator.Get<LocalizationProvider>().SetLanguage(language);
     }
-    public void SimulateBuildingClick()
+    public void AddReWorkers()
     {
-        if (targetBuilding == null)
-        {
-            Debug.LogWarning("TestButtons: targetBuilding is not assigned.");
-            return;
-        }
-
-        EventBus.Publish(new BuildingClickedEvent(targetBuilding));
-        Debug.Log($"Simulated click on building: {targetBuilding.name}");
-    }
-
-    public void SimulateGoldGain()
-    {
-        var resourceManager = ServiceLocator.Get<ResourceManager>();
-        if (resourceManager == null)
-        {
-            Debug.LogWarning("TestButtons: ResourceManager not found.");
-            return;
-        }
-
-        resourceManager.Add(ResourceType.Gold, goldPerClick);
-        Debug.Log($"Simulated gold gain: +{goldPerClick}");
+        ServiceLocator.Get<ResourceManager>().Add(ResourceType.Workers, 10);
     }
 }

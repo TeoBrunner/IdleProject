@@ -96,6 +96,8 @@ GameObject:
   - component: {fileID: 4245730482261889940}
   - component: {fileID: 9019152679978588654}
   - component: {fileID: 418025109384750404}
+  - component: {fileID: 7379949620601149273}
+  - component: {fileID: 5810433178656343617}
   - component: {fileID: 94930209591136262}
   m_Layer: 0
   m_Name: TownHall
@@ -225,6 +227,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuildingConstruction
   defaultVisual: {fileID: 9041108290329104643}
   constructionVisual: {fileID: 616979743689459690}
+--- !u!114 &7379949620601149273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3198147265447131879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 388d10c90b3a0fd449330a201aa9d979, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingUpgrade
+--- !u!114 &5810433178656343617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3198147265447131879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8696d28dde013844bd51d14329935d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingWorkers
+  producedResource: 0
 --- !u!61 &94930209591136262
 BoxCollider2D:
   m_ObjectHideFlags: 0

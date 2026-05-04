@@ -1,4 +1,5 @@
 using Configs;
+using Events;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -93,6 +94,7 @@ public class BuildingUpgrade : ConfigurableComponent
     {
         CurrentUpgradeLevel++;
         UpdateCurrentConfig();
+        EventBus.Publish(new BuildingUpgradedEvent(building));
     }
 
     public int GetRequiredAltarLevel()
